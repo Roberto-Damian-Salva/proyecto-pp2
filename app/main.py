@@ -30,3 +30,16 @@ app.include_router(turnos_router, prefix="/api/v1")
 @app.get("/")
 def read_root():
     return {"message": "Bienvenido a la API del Sistema de Reserva de Salones"}
+
+
+from fastapi import FastAPI
+from app.api import api_router
+
+app = FastAPI(title="API de Reserva de Salones")
+
+# Vinculas todas las rutas de la versión 1 con el prefijo /api/v1
+app.include_router(api_router, prefix="/api/v1")
+
+@app.get("/")
+def inicio():
+    return {"mensaje": "Bienvenido al sistema de reservas de salones"}
