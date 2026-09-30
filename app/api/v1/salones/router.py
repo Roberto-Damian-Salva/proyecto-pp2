@@ -5,7 +5,7 @@ from app.core.db import get_db
 from app.api.v1.salones.schemas import SalonCreate, SalonResponse
 from app.api.v1.salones import repository
 
-router = APIRouter(prefix="/salones", tags=["Salones"])
+router = APIRouter(tags=["Salones"]) 
 
 @router.post("/", response_model=SalonResponse, status_code=status.HTTP_201_CREATED)
 def crear(salon_in: SalonCreate, db: Session = Depends(get_db)):
