@@ -72,9 +72,29 @@ function aplicarFiltros() {
     renderizarSalones(filtrados);
 }
 
-// Función para manejar la acción del botón de reserva
+// REEMPLAZAR POR ESTO:
 function reservarSalon(id) {
-    alert(`Iniciando reserva para el salón con ID: ${id}`);
+    const salon = salonesOriginales.find(s => s.id === id);
+    const modal = document.getElementById('modal-reserva');
+    const titulo = document.getElementById('modal-titulo');
+    const inputId = document.getElementById('reserva-salon-id');
+
+    if (salon && modal) {
+        titulo.textContent = `Reservar ${salon.nombre || 'Salón'}`;
+        inputId.value = salon.id;
+        modal.classList.remove('hidden');
+    }
+}
+// Función para cerrar el modal y limpiar el formulario
+function cerrarModal() {
+    const modal = document.getElementById('modal-reserva');
+    const form = document.getElementById('form-reserva');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+    if (form) {
+        form.reset(); // Limpia la fecha y hora seleccionadas
+    }
 }
 
 // Inicialización de eventos al cargar el DOM
@@ -90,4 +110,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (selectCapacidad) {
         selectCapacidad.addEventListener('change', aplicarFiltros);
     }
+// Manejar la confirmación del formulario de reserva
+document.getElementById('form-reserva')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const salonId = document.getElementById('reserva-salon-id').value;
+    const fecha = document.getElementById('reserva-fecha').value;
+    const hora = document.getElementById('reserva-hora').value;
+
+    // Confirmación temporal en pantalla
+    alert(`¡Reserva confirmada!\nSalón ID: ${salonId}\nFecha: ${fecha}\nHora: ${hora}`);
+
+    cerrarModal();
+});
+
+// Eventos para cerrar el modal al presionar la 'X' o el botón 'Cancelar'
+document.getElementById('btn-cerrar-modal')?.addEventListener('click', cerrarModal);
+document.getElementById('btn-cancelar-modal')?.addEventListener('click', cerrarModal);
+
+// Cerrar el modal si se hace clic fuera del recuadro blanco
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('modal-reserva');
+    if (e.target === modal) {
+        cerrarModal();
+    }
+});
 });  
