@@ -1,4 +1,3 @@
-JS
 // Sesión: el token se guarda en localStorage
 const TOKEN_KEY = 'token';
 const getToken = () => localStorage.getItem(TOKEN_KEY);
