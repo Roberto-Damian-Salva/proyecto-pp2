@@ -54,3 +54,4 @@ async function cancelarTurno(id) {
     }
     return request(`/turnos/${id}`, { method: 'PATCH', headers: { ...JSON_HEADERS, ...authHeaders() }, body: JSON.stringify({ estado: 'cancelado' }) });
 }
+ 

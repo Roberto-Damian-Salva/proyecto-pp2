@@ -1,4 +1,3 @@
-s · JS
 const ESTADOS = { confirmado: 'Confirmado', pendiente: 'Pendiente', cancelado: 'Cancelado' };
 let turnos = [];
  

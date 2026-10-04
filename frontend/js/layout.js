@@ -1,3 +1,4 @@
+
 // Header y footer para login, turnos y detalle (index.html ya los trae)
 function montarLayout() {
     document.getElementById('header-host').outerHTML = `
@@ -21,3 +22,4 @@ function montarLayout() {
     document.getElementById('menu-button').addEventListener('click', () => nav.classList.toggle('open'));
     hidratarIconos();
 }
+ 

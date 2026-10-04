@@ -38,3 +38,4 @@ async function cargarDetalle() {
 }
  
 document.addEventListener('DOMContentLoaded', () => { montarLayout(); cargarDetalle(); });
+ 
