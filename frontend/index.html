@@ -4,38 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reserva de Salones</title>
-    <link rel="stylesheet" href="./style.css">
-    <!-- Fuente moderna desde Google Fonts -->
+    <script>
+        try { document.documentElement.dataset.theme = localStorage.getItem('theme') || 'light'; } catch (e) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-
+ 
     <header class="navbar">
         <div class="logo">Salones Eventos</div>
         <nav>
-            <a href="index.html">Inicio</a>
+            <a href="index.html" aria-current="page">Inicio</a>
             <a href="#salones-section">Salones</a>
             <a href="turnos.html">Mis turnos</a>
+            <a href="login.html">Ingresar</a>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Cambiar tema">☾</button>
         </nav>
     </header>
-
+ 
     <main class="container">
         <section class="hero">
             <h1>Encuentra y reserva el salón ideal</h1>
             <p>Explora la disponibilidad de nuestros espacios para tus eventos.</p>
         </section>
-
-      
-            <section id="salones-section" class="salones-section">
+ 
+        <section id="salones-section" class="salones-section">
             <h2>Salones Disponibles</h2>
-
+ 
             <!-- Controles de búsqueda y filtro -->
             <div class="filtros-container">
-                <input 
-                    type="text" 
-                    id="input-busqueda" 
-                    placeholder="Buscar salón por nombre..."
-                >
+                <input type="text" id="input-busqueda" placeholder="Buscar salón por nombre...">
                 <select id="select-capacidad">
                     <option value="0">Cualquier capacidad</option>
                     <option value="50">Mínimo 50 personas</option>
@@ -43,41 +44,37 @@
                     <option value="200">Mínimo 200 personas</option>
                 </select>
             </div>
-
-            <!-- Contenedor donde ui.js dibuja las tarjetas de salones -->
-            <div id="lista-salones" class="grid-salones"></div>
-        </section>
+ 
+            <!-- app.js dibuja acá las tarjetas -->
             <div id="salones-grid" class="grid">
                 <p class="loading">Cargando salones...</p>
             </div>
         </section>
     </main>
-
-    <script src="./app.js"></script>
-
+ 
     <footer class="footer">
         <p>&copy; 2026 Sistema de Turnos - PP2 Grupo 8</p>
     </footer>
+ 
     <!-- Modal de Reserva -->
     <div id="modal-reserva" class="modal-overlay hidden">
         <div class="modal-content">
-            <button id="btn-cerrar-modal" class="btn-cerrar">&times;</button>
+            <button id="btn-cerrar-modal" class="btn-cerrar" aria-label="Cerrar">&times;</button>
             <h3 id="modal-titulo">Reservar Salón</h3>
-            
+ 
             <form id="form-reserva">
-                <!-- Guardamos la ID del salón de forma oculta -->
                 <input type="hidden" id="reserva-salon-id">
-
+ 
                 <div class="campo-form">
                     <label for="reserva-fecha">Fecha:</label>
                     <input type="date" id="reserva-fecha" required>
                 </div>
-
+ 
                 <div class="campo-form">
                     <label for="reserva-hora">Hora:</label>
                     <input type="time" id="reserva-hora" required>
                 </div>
-
+ 
                 <div class="modal-acciones">
                     <button type="button" id="btn-cancelar-modal" class="btn-secundario">Cancelar</button>
                     <button type="submit" class="btn-primario">Confirmar Reserva</button>
@@ -85,5 +82,12 @@
             </form>
         </div>
     </div>
+ 
+    <!-- El orden importa: cada archivo usa funciones del anterior -->
+    <script src="./js/theme.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/ui.js"></script>
+    <script src="./js/app.js"></script>
 </body>
 </html>
+ 
