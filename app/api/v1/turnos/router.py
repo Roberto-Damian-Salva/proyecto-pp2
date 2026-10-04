@@ -5,7 +5,7 @@ from app.core.db import get_db
 from app.api.v1.turnos.schemas import TurnoCreate, TurnoResponse
 from app.api.v1.turnos import repository
 
-router = APIRouter()
+router = APIRouter(prefix="/turnos", tags=["Turnos"])
 
 @router.post("/", response_model=TurnoResponse, status_code=status.HTTP_201_CREATED)
 def reservar(turno_in: TurnoCreate, db: Session = Depends(get_db)):

@@ -3,115 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aurea Salones</title>
-    <link rel="icon" href="data:,">
+    <title>Reserva de Salones</title>
     <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./extras.css">
+    <!-- Fuente moderna desde Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<main>
-    <header class="site-header">
-        <a class="brand" href="#inicio" aria-label="Aurea Salones, inicio">
-            <span class="brand-mark"><i data-icon="sparkle" data-size="17"></i></span>
-            <span>AUREA<small>SALONES</small></span>
-        </a>
-        <button class="menu-button" id="menu-button" type="button" aria-label="Abrir menú"><i data-icon="menu"></i></button>
-        <nav class="nav" id="nav">
-            <a href="#salones">Salones</a>
+
+    <header class="navbar">
+        <div class="logo">Salones Eventos</div>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="#salones-section">Salones</a>
             <a href="turnos.html">Mis turnos</a>
-            <a href="#contacto">Contacto</a>
-            <a class="nav-cta" href="login.html">Ingresar <i data-icon="arrow" data-size="16"></i></a>
         </nav>
     </header>
- 
-    <section class="hero" id="inicio">
-        <img src="https://images.unsplash.com/photo-1670529776286-f426fb7ba42c?auto=format&fit=crop&w=2000&q=90" alt="Salón elegante preparado para una celebración">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <span class="eyebrow light"><span></span> Espacios extraordinarios</span>
-            <h1>Encuentra el salón perfecto <em>para tu evento</em></h1>
-            <p>Lugares singulares, seleccionados para convertir cada celebración en un recuerdo inolvidable.</p>
-            <a class="primary-button" href="#salones">Reservar ahora <i data-icon="arrow" data-size="18"></i></a>
-        </div>
-        <div class="hero-note"><i data-icon="sparkle" data-size="16"></i> Selección personalizada</div>
-    </section>
- 
-    <section class="filter-wrap" aria-label="Buscar salones">
-        <div class="filter-panel">
-            <label><span><i data-icon="search" data-size="17"></i> Buscar</span>
-                <input type="text" id="input-busqueda" placeholder="Nombre del salón..."></label>
-            <label><span><i data-icon="users" data-size="17"></i> Capacidad</span>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Encuentra y reserva el salón ideal</h1>
+            <p>Explora la disponibilidad de nuestros espacios para tus eventos.</p>
+        </section>
+
+      
+            <section id="salones-section" class="salones-section">
+            <h2>Salones Disponibles</h2>
+
+            <!-- Controles de búsqueda y filtro -->
+            <div class="filtros-container">
+                <input 
+                    type="text" 
+                    id="input-busqueda" 
+                    placeholder="Buscar salón por nombre..."
+                >
                 <select id="select-capacidad">
-                    <option value="0">Cualquiera</option>
-                    <option value="50">Mínimo 50</option>
-                    <option value="100">Mínimo 100</option>
-                    <option value="200">Mínimo 200</option>
-                </select></label>
-            <button class="search-button" type="button" id="btn-buscar"><i data-icon="search"></i> Buscar</button>
-        </div>
-    </section>
- 
-    <section class="section venues-section" id="salones">
-        <div class="section-heading">
-            <div><span class="eyebrow"><span></span> Nuestra selección</span><h2>Espacios con <em>alma propia</em></h2></div>
-            <p>Cada salón ha sido elegido por su belleza, servicio excepcional y capacidad para crear momentos únicos.</p>
-        </div>
-        <div class="venue-grid" id="salones-grid"><p class="empty-state">Cargando salones...</p></div>
-    </section>
- 
-    <section class="contact-section" id="contacto">
-        <div class="contact-intro">
-            <span class="eyebrow"><span></span> Hablemos</span>
-            <h2>Tu celebración empieza <em>aquí</em></h2>
-            <p>Cuéntanos qué imaginas. Nuestro equipo te ayudará a encontrar el espacio y los detalles perfectos para tu evento.</p>
-            <div class="contact-details">
-                <span><i data-icon="phone"></i><small>Llámanos<strong>+34 910 245 680</strong></small></span>
-                <span><i data-icon="mail"></i><small>Escríbenos<strong>hola@aureasalones.es</strong></small></span>
+                    <option value="0">Cualquier capacidad</option>
+                    <option value="50">Mínimo 50 personas</option>
+                    <option value="100">Mínimo 100 personas</option>
+                    <option value="200">Mínimo 200 personas</option>
+                </select>
             </div>
-        </div>
-        <form class="contact-form" id="contact-form">
-            <div class="form-row">
-                <label>Nombre completo<input required placeholder="Tu nombre"></label>
-                <label>Correo electrónico<input required type="email" placeholder="tu@email.com"></label>
+
+            <!-- Contenedor donde ui.js dibuja las tarjetas de salones -->
+            <div id="lista-salones" class="grid-salones"></div>
+        </section>
+            <div id="salones-grid" class="grid">
+                <p class="loading">Cargando salones...</p>
             </div>
-            <label>Cuéntanos sobre tu evento<textarea required rows="4" placeholder="Fecha, número de invitados y todo aquello que sea importante para ti..."></textarea></label>
-            <button class="primary-button" type="submit" id="btn-contacto">Enviar consulta <i data-icon="arrow" data-size="18"></i></button>
-            <small>Al enviar aceptas nuestra política de privacidad.</small>
-        </form>
-    </section>
- 
-    <footer>
-        <div class="footer-main">
-            <div>
-                <a class="brand footer-brand" href="#inicio"><span class="brand-mark"><i data-icon="sparkle" data-size="17"></i></span><span>AUREA<small>SALONES</small></span></a>
-                <p>Espacios excepcionales para momentos que permanecen.</p>
-            </div>
-            <div><h4>Explora</h4><a href="#salones">Nuestros salones</a><a href="turnos.html">Mis turnos</a><a href="#contacto">Contacto</a></div>
-            <div><h4>Cuenta</h4><a href="login.html">Ingresar</a><a href="login.html">Crear cuenta</a></div>
-        </div>
-        <div class="footer-bottom"><span>© 2026 Aurea Salones · PP2 Grupo 8</span><span>Hecho con cuidado para celebrar lo extraordinario</span></div>
+        </section>
+    </main>
+
+    <script src="./app.js"></script>
+
+    <footer class="footer">
+        <p>&copy; 2026 Sistema de Turnos - PP2 Grupo 8</p>
     </footer>
-</main>
- 
-<div id="modal-reserva" class="modal-overlay hidden">
-    <div class="modal-content">
-        <button id="btn-cerrar-modal" class="btn-cerrar" type="button" aria-label="Cerrar">&times;</button>
-        <h3 id="modal-titulo">Reservar Salón</h3>
-        <form id="form-reserva">
-            <input type="hidden" id="reserva-salon-id">
-            <label class="campo-form">Fecha<input type="date" id="reserva-fecha" required></label>
-            <label class="campo-form">Hora<input type="time" id="reserva-hora" required></label>
-            <div class="modal-acciones">
-                <button type="button" id="btn-cancelar-modal" class="btn-secundario">Cancelar</button>
-                <button type="submit" class="btn-primario">Confirmar reserva</button>
-            </div>
-        </form>
+    <!-- Modal de Reserva -->
+    <div id="modal-reserva" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="btn-cerrar-modal" class="btn-cerrar">&times;</button>
+            <h3 id="modal-titulo">Reservar Salón</h3>
+            
+            <form id="form-reserva">
+                <!-- Guardamos la ID del salón de forma oculta -->
+                <input type="hidden" id="reserva-salon-id">
+
+                <div class="campo-form">
+                    <label for="reserva-fecha">Fecha:</label>
+                    <input type="date" id="reserva-fecha" required>
+                </div>
+
+                <div class="campo-form">
+                    <label for="reserva-hora">Hora:</label>
+                    <input type="time" id="reserva-hora" required>
+                </div>
+
+                <div class="modal-acciones">
+                    <button type="button" id="btn-cancelar-modal" class="btn-secundario">Cancelar</button>
+                    <button type="submit" class="btn-primario">Confirmar Reserva</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
- 
-<script src="./js/icons.js"></script>
-<script src="./js/api.js"></script>
-<script src="./js/ui.js"></script>
-<script src="./js/app.js"></script>
 </body>
 </html>
