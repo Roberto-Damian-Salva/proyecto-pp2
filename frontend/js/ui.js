@@ -1,64 +1,54 @@
-/ Crea un elemento. "text" se asigna con textContent (seguro contra XSS)
+// Crea un elemento. "text" usa textContent (seguro contra XSS)
 function crearEl(tag, props = {}, ...hijos) {
     const nodo = document.createElement(tag);
-    for (const [clave, valor] of Object.entries(props)) {
-        if (valor == null || valor === false) continue;
-        if (clave === 'class') nodo.className = valor;
-        else if (clave === 'text') nodo.textContent = valor;
-        else if (clave.startsWith('on')) nodo.addEventListener(clave.slice(2), valor);
-        else nodo.setAttribute(clave, valor);
+    for (const [k, v] of Object.entries(props)) {
+        if (v == null || v === false) continue;
+        if (k === 'class') nodo.className = v;
+        else if (k === 'text') nodo.textContent = v;
+        else if (k.startsWith('on')) nodo.addEventListener(k.slice(2), v);
+        else nodo.setAttribute(k, v);
     }
     nodo.append(...hijos.filter((h) => h != null && h !== false));
     return nodo;
 }
  
-/* ---------- Mensajes de estado ---------- */
+// La API no trae fotos: se reparten estas del diseño
+const IMAGENES = [
+    'https://images.unsplash.com/photo-1665607437981-973dcd6a22bb?auto=format&fit=crop&w=1400&q=85',
+    'https://images.unsplash.com/photo-1670529776180-60e4132ab90c?auto=format&fit=crop&w=1400&q=85',
+    'https://images.unsplash.com/photo-1712314947761-a8d718bd8c32?auto=format&fit=crop&w=1400&q=85',
+];
+ 
 function mostrarEstado(texto, botonTexto, onBoton) {
-    const grid = document.getElementById('salones-grid');
-    grid.replaceChildren(
+    document.getElementById('salones-grid').replaceChildren(
         crearEl('div', { class: 'state-box' },
             crearEl('p', { text: texto }),
-            botonTexto
-                ? crearEl('button', { class: 'btn-outline', type: 'button', text: botonTexto, onclick: onBoton })
-                : null,
-        )
-    );
+            botonTexto ? crearEl('button', { class: 'btn-outline', type: 'button', text: botonTexto, onclick: onBoton }) : null));
 }
  
-/* ---------- Tarjetas de salones ---------- */
 function crearTarjeta(salon) {
-    return crearEl('div', { class: 'card' },
-        crearEl('h3', { text: salon.nombre ?? 'Salón sin nombre' }),
-        crearEl('p', { text: salon.descripcion ?? 'Sin descripción disponible.' }),
-        crearEl('div', { class: 'card-footer' },
-            crearEl('span', { class: 'capacidad' },
-                'Capacidad: ',
-                crearEl('strong', { text: String(salon.capacidad ?? 'N/A') }),
-            ),
-            crearEl('button', {
-                class: 'btn-reservar',
-                type: 'button',
-                text: 'Reservar',
-                onclick: () => reservarSalon(salon.id),
-            }),
-        ),
-    );
+    const nombre = salon.nombre ?? 'Salón sin nombre';
+    return crearEl('article', { class: 'venue-card' },
+        crearEl('div', { class: 'card-image' },
+            crearEl('img', { src: IMAGENES[(Number(salon.id) || 0) % IMAGENES.length], alt: nombre, loading: 'lazy' }),
+            crearEl('button', { class: 'heart-button', type: 'button', 'aria-label': `Guardar ${nombre}` }, icono('heart', 18))),
+        crearEl('div', { class: 'card-body' },
+            crearEl('div', { class: 'card-title-row' }, crearEl('h3', {}, crearEl('a', { href: `detalle.html?id=${salon.id}`, text: nombre }))),
+            crearEl('p', { text: salon.descripcion ?? 'Sin descripción disponible.' }),
+            crearEl('div', { class: 'card-meta' },
+                crearEl('span', {}, icono('users', 16), ` Hasta ${salon.capacidad ?? 'N/A'}`)),
+            crearEl('button', { class: 'text-button', type: 'button', onclick: () => reservarSalon(salon.id) },
+                'Reservar', icono('arrow', 17))));
 }
  
 function renderizarSalones(salones) {
-    const grid = document.getElementById('salones-grid');
-    if (salones.length === 0) {
-        mostrarEstado('No hay salones disponibles que coincidan con la búsqueda.');
-        return;
-    }
-    grid.replaceChildren(...salones.map(crearTarjeta));
+    if (!salones.length) return mostrarEstado('No hay salones que coincidan con la búsqueda.');
+    document.getElementById('salones-grid').replaceChildren(...salones.map(crearTarjeta));
 }
  
-/* ---------- Modal de reserva ---------- */
 function abrirModal(salon) {
-    document.getElementById('modal-titulo').textContent = `Reservar ${salon.nombre || 'Salón'}`;
+    document.getElementById('modal-titulo').textContent = `Reservar ${salon.nombre || 'salón'}`;
     document.getElementById('reserva-salon-id').value = salon.id;
-    // No permitir fechas pasadas
     document.getElementById('reserva-fecha').min = new Date().toISOString().split('T')[0];
     document.getElementById('modal-reserva').classList.remove('hidden');
 }
@@ -67,4 +57,3 @@ function cerrarModal() {
     document.getElementById('modal-reserva').classList.add('hidden');
     document.getElementById('form-reserva').reset();
 }
- 
