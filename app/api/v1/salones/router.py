@@ -12,5 +12,5 @@ def crear(salon_in: SalonCreate, db: Session = Depends(get_db)):
     return repository.crear_salon(db, salon_in)
 
 @router.get("/", response_model=List[SalonResponse])
-def listar(db: Session = Depends(get_db)):
-    return repository.obtener_salones(db)
+def listar(capacidad_min: int = 0, db: Session = Depends(get_db)):
+    return repository.obtener_salones(db, capacidad_min)
