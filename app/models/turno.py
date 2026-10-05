@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
-from app.core.db import Base
+from app.models.turno import TurnoModel
+from app.models.salon import SalonModel
 
 class TurnoModel(Base):
     __tablename__ = "turnos"
