@@ -13,7 +13,7 @@
   <header class="site-header">
     <a class="brand" href="#inicio" aria-label="Festia, inicio">
       <span class="brand-mark"><i data-icon="sparkle" data-size="17"></i></span>
-      <span>Festia<small></small></span>
+      <span>Festia</span>
     </a>
     <button class="menu-button" id="menu-button" type="button" aria-label="Abrir menú"><i data-icon="menu"></i></button>
     <nav class="nav" id="nav">
@@ -37,25 +37,26 @@
 
   <section class="filter-wrap" aria-label="Buscar salones">
     <div class="filter-panel">
-        <label><span><i data-icon="tag"></i> Categoría</span>
-  <select id="select-categoria">
-    <option value="">Todas</option>
-    <option value="Bodas">Bodas</option>
-    <option value="Cumpleaños">Cumpleaños</option>
-    <option value="Corporativo">Corporativo</option>
-  </select>
-</label>
-
-      <label><span><i data-icon="search"></i> Buscar</span>
-        <input type="text" id="input-busqueda" placeholder="Nombre del salón..."></label>
-      <label><span><i data-icon="users"></i> Capacidad</span>
+      <label><span><i data-icon="tag" data-size="16"></i> Categoría</span>
+        <select id="select-categoria">
+          <option value="">Todas</option>
+          <option value="Bodas">Bodas</option>
+          <option value="Cumpleaños">Cumpleaños</option>
+          <option value="Corporativo">Corporativo</option>
+        </select>
+      </label>
+      <label><span><i data-icon="search" data-size="16"></i> Buscar</span>
+        <input type="text" id="input-busqueda" placeholder="Nombre del salón...">
+      </label>
+      <label><span><i data-icon="users" data-size="16"></i> Capacidad</span>
         <select id="select-capacidad">
           <option value="0">Cualquiera</option>
           <option value="50">Mínimo 50</option>
           <option value="100">Mínimo 100</option>
           <option value="200">Mínimo 200</option>
-        </select></label>
-      <button class="search-button" type="button" id="btn-buscar"><i data-icon="search"></i> Buscar</button>
+        </select>
+      </label>
+      <button class="search-button" type="button" id="btn-buscar"><i data-icon="search" data-size="16"></i> Buscar</button>
     </div>
   </section>
 
@@ -73,8 +74,8 @@
       <h2>Tu celebración empieza <em>aquí</em></h2>
       <p>Cuéntanos qué imaginas. Nuestro equipo te ayudará a encontrar el espacio perfecto.</p>
       <div class="contact-details">
-        <span><i data-icon="phone"></i><small>Llámanos<strong>3872174060</strong></small></span>
-        <span><i data-icon="mail"></i><small>Escríbenos<strong>festiasalones@gmail.com</strong></small></span>
+        <span><i data-icon="phone" data-size="16"></i><small>Llámanos<strong>3872174060</strong></small></span>
+        <span><i data-icon="mail" data-size="16"></i><small>Escríbenos<strong>festiasalones@gmail.com</strong></small></span>
       </div>
     </div>
     <form class="contact-form" id="contact-form">
@@ -83,29 +84,28 @@
         <label>Correo electrónico<input required type="email" placeholder="tu@email.com"></label>
       </div>
       <label>Cuéntanos sobre tu evento<textarea required rows="4"></textarea></label>
-      <button class="primary-button" type="submit" id="btn-contacto">Enviar consulta <i data-icon="arrow"></i></button>
+      <button class="primary-button" type="submit" id="btn-contacto">Enviar consulta <i data-icon="arrow" data-size="16"></i></button>
     </form>
   </section>
-  <button type="submit">Reservar</button>
-<button type="button" onclick="cerrarModal()">Cerrar</button>
-
-
-</div>
-
 
   <footer>
     <p>&copy; 2026 Festia - Todos los derechos reservados</p>
   </footer>
 </main>
 
-<!-- Scripts -->
+<!-- ACA VA TU MODAL REAL, NO AFUERA -->
+<div id="modal-reserva" class="modal hidden"></div>
+
+<script src="./js/icons.js"></script>
 <script src="./js/api.js"></script>
 <script src="./js/ui.js"></script>
 <script src="./js/app.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    cargarSalones(); // ✅ carga inicial
+    cargarSalones();
+    hidratarIconos();
     document.getElementById("btn-buscar").addEventListener("click", aplicarFiltros);
+    document.getElementById("input-busqueda").addEventListener("input", aplicarFiltros);
   });
 </script>
 </body>
