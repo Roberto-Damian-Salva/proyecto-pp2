@@ -1,16 +1,15 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from typing import List
 from app.core.db import get_db
 from app.api.v1.salones.schemas import SalonCreate, SalonResponse
-from app.api.v1.salones import repository
+from app.api.v1.salones.repository import crear_salon, obtener_salones
 
-router = APIRouter(tags=["Salones"]) 
+router = APIRouter()  # ✅ sin prefix aquí
 
-@router.post("/", response_model=SalonResponse, status_code=status.HTTP_201_CREATED)
-def crear(salon_in: SalonCreate, db: Session = Depends(get_db)):
-    return repository.crear_salon(db, salon_in)
+@router.post("/", response_model=SalonResponse)
+def crear_salon_endpoint(salon: SalonCreate, db: Session = Depends(get_db)):
+    return crear_salon(db, salon)
 
-@router.get("/", response_model=List[SalonResponse])
-def listar(capacidad_min: int = 0, db: Session = Depends(get_db)):
-    return repository.obtener_salones(db, capacidad_min)
+@router.get("/", response_model=list[SalonResponse])
+def obtener_salones_endpoint(capacidad_min: int = 0, db: Session = Depends(get_db)):
+    return obtener_salones(db, capacidad_min)
