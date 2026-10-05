@@ -5,3 +5,4 @@ const saveToken = (t) => localStorage.setItem(TOKEN_KEY, t);
 const isLoggedIn = () => Boolean(getToken());
 const authHeaders = () => (getToken() ? { Authorization: `Bearer ${getToken()}` } : {});
 function logout() { localStorage.removeItem(TOKEN_KEY); location.href = 'login.html'; }
+ 
