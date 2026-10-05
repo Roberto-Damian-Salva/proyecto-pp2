@@ -13,8 +13,9 @@
     <header class="navbar">
         <div class="logo">Salones Eventos</div>
         <nav>
-            <a href="#">Inicio</a>
-            <a href="#">Mis Reservas</a>
+            <a href="index.html">Inicio</a>
+            <a href="#salones-section">Salones</a>
+            <a href="turnos.html">Mis turnos</a>
         </nav>
     </header>
 
@@ -24,8 +25,28 @@
             <p>Explora la disponibilidad de nuestros espacios para tus eventos.</p>
         </section>
 
-        <section class="salones-section">
+      
+            <section id="salones-section" class="salones-section">
             <h2>Salones Disponibles</h2>
+
+            <!-- Controles de búsqueda y filtro -->
+            <div class="filtros-container">
+                <input 
+                    type="text" 
+                    id="input-busqueda" 
+                    placeholder="Buscar salón por nombre..."
+                >
+                <select id="select-capacidad">
+                    <option value="0">Cualquier capacidad</option>
+                    <option value="50">Mínimo 50 personas</option>
+                    <option value="100">Mínimo 100 personas</option>
+                    <option value="200">Mínimo 200 personas</option>
+                </select>
+            </div>
+
+            <!-- Contenedor donde ui.js dibuja las tarjetas de salones -->
+            <div id="lista-salones" class="grid-salones"></div>
+        </section>
             <div id="salones-grid" class="grid">
                 <p class="loading">Cargando salones...</p>
             </div>
@@ -33,5 +54,36 @@
     </main>
 
     <script src="./app.js"></script>
+
+    <footer class="footer">
+        <p>&copy; 2026 Sistema de Turnos - PP2 Grupo 8</p>
+    </footer>
+    <!-- Modal de Reserva -->
+    <div id="modal-reserva" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="btn-cerrar-modal" class="btn-cerrar">&times;</button>
+            <h3 id="modal-titulo">Reservar Salón</h3>
+            
+            <form id="form-reserva">
+                <!-- Guardamos la ID del salón de forma oculta -->
+                <input type="hidden" id="reserva-salon-id">
+
+                <div class="campo-form">
+                    <label for="reserva-fecha">Fecha:</label>
+                    <input type="date" id="reserva-fecha" required>
+                </div>
+
+                <div class="campo-form">
+                    <label for="reserva-hora">Hora:</label>
+                    <input type="time" id="reserva-hora" required>
+                </div>
+
+                <div class="modal-acciones">
+                    <button type="button" id="btn-cancelar-modal" class="btn-secundario">Cancelar</button>
+                    <button type="submit" class="btn-primario">Confirmar Reserva</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
