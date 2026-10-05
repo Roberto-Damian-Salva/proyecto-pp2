@@ -29,6 +29,7 @@ app.add_middleware(
 # Incluir las rutas
 app.include_router(salones_router, prefix="/api/v1/salones", tags=["Salones"])
 app.include_router(turnos_router, prefix="/api/v1/turnos", tags=["Turnos"])
+app.include_router(auth_router, prefix="/api/v1")
 
 @app.get("/")
 def inicio():
