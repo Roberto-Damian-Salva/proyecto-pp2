@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Reservas | Aurea Salones</title>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    /* Grilla de reservas */
+    .reservas-grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      padding: 2rem;
+    }
+
+    /* Tarjeta estilizada */
+    .reserva-card {
+      background: var(--dark-green, #0b3d2e);
+      color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease;
+    }
+    .reserva-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .reserva-card h3 {
+      margin: 0 0 .5rem;
+      font-size: 1.4rem;
+      color: var(--gold, #d4af37);
+    }
+
+    .reserva-meta p {
+      margin: .3rem 0;
+      font-size: .95rem;
+    }
+
+    .reserva-actions {
+      display: flex;
+      gap: .5rem;
+      margin-top: 1rem;
+    }
+
+    .reserva-actions button {
+      flex: 1;
+      padding: .6rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s ease;
+    }
+
+    .btn-edit {
+      background: #ffc107;
+      color: #000;
+    }
+    .btn-edit:hover {
+      background: #e0a800;
+    }
+
+    .btn-cancel {
+      background: #dc3545;
+      color: #fff;
+    }
+    .btn-cancel:hover {
+      background: #b02a37;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <h1>Mis Reservas</h1>
+  </header>
+  <main>
+    <div class="reservas-grid" id="reservas-lista"></div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const reservas = JSON.parse(localStorage.getItem("reservas")) || [
+        { id: 1, salon: "Salon Azul", fecha: "2026-10-10", hora: "18:00", estado: "Confirmada" },
+        { id: 2, salon: "Salon Dorado", fecha: "2026-11-05", hora: "20:00", estado: "Pendiente" }
+      ];
+
+      const cont = document.getElementById("reservas-lista");
+
+      if (reservas.length === 0) {
+        cont.innerHTML = "<p>No tienes reservas todavía.</p>";
+        return;
+      }
+
+      cont.innerHTML = reservas.map(r => `
+        <div class="reserva-card" data-id="${r.id}">
+          <h3>${r.salon}</h3>
+          <div class="reserva-meta">
+            <p><strong>Fecha:</strong> ${r.fecha}</p>
+            <p><strong>Hora:</strong> ${r.hora}</p>
+            <p><strong>Estado:</strong> ${r.estado}</p>
+          </div>
+          <div class="reserva-actions">
+            <button class="btn-edit" onclick="editarReserva(${r.id})">Editar</button>
+            <button class="btn-cancel" onclick="cancelarReserva(${r.id})">Cancelar</button>
+          </div>
+        </div>
+      `).join("");
+    });
+
+    function editarReserva(id) {
+      alert("Editar reserva " + id + " (acá podés abrir un modal para cambiar fecha/hora)");
+    }
+
+    function cancelarReserva(id) {
+      if (confirm("¿Seguro que querés cancelar esta reserva?")) {
+        let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+        reservas = reservas.filter(r => r.id !== id);
+        localStorage.setItem("reservas", JSON.stringify(reservas));
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>

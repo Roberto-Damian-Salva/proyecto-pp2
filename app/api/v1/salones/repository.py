@@ -14,5 +14,5 @@ def crear_salon(db: Session, salon_in: SalonCreate):
     db.refresh(nuevo_salon)
     return nuevo_salon
 
-def obtener_salones(db: Session):
-    return db.query(SalonModel).all()
+def obtener_salones(db: Session, capacidad_min: int = 0):
+    return db.query(SalonModel).filter(SalonModel.capacidad >= capacidad_min).all()
