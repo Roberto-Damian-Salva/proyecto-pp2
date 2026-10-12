@@ -36,5 +36,7 @@ class SalonModel(Base):
 
     @property
     def tipos_evento(self) -> list[str]:
-        """Lista de nombres, para que el schema la devuelva directo."""
+        """Lista de nombres, para que el schema la serialice directo."""
         return [t.nombre for t in self.tipos]
+
+# El modelo de turnos NO va acá: vive en app/models/turno.py (TurnoModel).

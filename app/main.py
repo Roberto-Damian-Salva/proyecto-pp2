@@ -5,6 +5,7 @@ from app.api.v1.turnos.router import router as turnos_router
 from app.api.v1.auth.router import router as auth_router
 from app.models.turno import TurnoModel
 from app.models.salon import SalonModel
+from app.models.user import UserModel
 from app.api.v1.salones.router import router as salones_router, tipos_router
 
 
