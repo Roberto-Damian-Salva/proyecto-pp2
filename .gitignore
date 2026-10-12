@@ -6,3 +6,7 @@ __pycache__/
 *.db
 *.sqlite3
 salones.db
+frontend/node_modules
+frontend/.env
+frontend/dist
+frontend/.git-backup
