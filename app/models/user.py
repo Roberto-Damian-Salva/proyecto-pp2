@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String
+
 from app.core.db import Base
+
 
 class UserModel(Base):
     __tablename__ = "usuarios"
@@ -8,4 +10,4 @@ class UserModel(Base):
     nombre = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
-    rol = Column(String, default="cliente") # "cliente" o "admin"
+    rol = Column(String, default="usuario")  # "usuario" | "admin"
