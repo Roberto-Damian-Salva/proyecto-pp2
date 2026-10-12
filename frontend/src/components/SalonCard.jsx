@@ -1,20 +1,45 @@
 import { Link } from "react-router-dom";
+import Icono from "./Icono";
+import { fotoDe } from "../utils/imagenes";
 
-export default function SalonCard({ salon }) {
-  const precio = Number(salon.precio_por_hora ?? 0);
-  const tipos = salon.tipos_evento ?? [];
+// Toda la tarjeta es clickeable: el botón del título se estira sobre ella (ver .card-abrir en App.css).
+export default function SalonCard({ salon, onAbrir }) {
+  const nombre = salon.nombre ?? "Salón sin nombre";
 
   return (
-    <article className="salon-card">
-      {salon.imagenes?.[0] && <img src={salon.imagenes[0]} alt={salon.nombre} />}
-      <div className="salon-card__body">
-        <h3>{salon.nombre}</h3>
-        <p>Capacidad: {salon.capacidad} personas</p>
-        {tipos.length > 0 && <p>{tipos.join(" · ")}</p>}
-        <p>
-          <strong>${precio.toLocaleString("es-AR")}</strong> por hora
-        </p>
-        <Link to={`/salones/${salon.id}`}>Ver detalle</Link>
+    <article className="venue-card">
+      <div className="card-image">
+        <img src={fotoDe(salon, 0)} alt="" loading="lazy" />
+        <button className="heart-button" type="button" aria-label={`Guardar ${nombre}`}>
+          <Icono nombre="heart" size={18} />
+        </button>
+      </div>
+
+      <div className="card-body">
+        <div className="card-title-row">
+          <h3>
+            <button
+              className="card-abrir"
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => onAbrir(salon)}
+            >
+              {nombre}
+            </button>
+          </h3>
+        </div>
+        <p>{salon.descripcion ?? "Sin descripción disponible."}</p>
+
+        <div className="card-meta">
+          <span><Icono nombre="users" size={16} /> Hasta {salon.capacidad ?? "N/A"}</span>
+          {salon.precio_por_hora != null && (
+            <strong>${salon.precio_por_hora.toLocaleString("es-AR")} / hora</strong>
+          )}
+        </div>
+
+        <Link className="text-button" to={`/salones/${salon.id}/reservar`}>
+          Reservar <Icono nombre="arrow" size={17} />
+        </Link>
       </div>
     </article>
   );

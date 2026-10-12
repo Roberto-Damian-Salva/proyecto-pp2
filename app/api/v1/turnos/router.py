@@ -1,6 +1,5 @@
+from fastapi import APIRouter, Depends, HTTPException, status
 from datetime import date, datetime
-
-from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
@@ -10,9 +9,9 @@ from app.models.turno import TurnoModel
 from app.api.v1.turnos.schemas import TurnoCreate, TurnoResponse
 from app.api.v1.turnos import repository as repo
 
-router = APIRouter() # main.py lo monta en /api/v1/turnos
+router = APIRouter()
 
-@router.post("/", response_model=TurnoResponse, status_code=201)
+@router.post("/", response_model=TurnoResponse, status_code=status.HTTP_201_CREATED)
 def reservar(
     data: TurnoCreate,
     db: Session = Depends(get_db),
@@ -40,10 +39,8 @@ def listar_todos(
     db: Session = Depends(get_db),
     user=Depends(get_current_user),
 ):
-    # Este es el que te faltaba y te daba 405
     if getattr(user, "rol", None)!= "admin":
         raise HTTPException(status_code=403, detail="Solo admin puede ver todos los turnos")
-
     turnos = db.query(TurnoModel).filter(TurnoModel.estado!= "cancelado").all()
     return [repo.a_respuesta(t) for t in turnos]
 
@@ -51,7 +48,7 @@ def listar_todos(
 def mis_turnos(db: Session = Depends(get_db), user=Depends(get_current_user)):
     return [repo.a_respuesta(t) for t in repo.turnos_de_cliente(db, user.id)]
 
-@router.delete("/{turno_id}", status_code=204)
+@router.delete("/{turno_id}", status_code=status.HTTP_204_NO_CONTENT)
 def cancelar(
     turno_id: int,
     db: Session = Depends(get_db),

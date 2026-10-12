@@ -1,32 +1,17 @@
-import { useState } from "react";
+import { fotoDe } from "../utils/imagenes";
 
-export default function GaleriaSalon({ imagenes = [], nombre }) {
-  const [actual, setActual] = useState(0);
-
-  if (imagenes.length === 0) {
-    return <div className="galeria galeria--vacia">Sin fotos</div>;
-  }
+// Galería del diseño original: una foto grande, una mediana y una última con el contador de fotos extra.
+export default function GaleriaSalon({ salon }) {
+  const extra = (salon.imagenes?.length ?? 0) - 3;
 
   return (
-    <div className="galeria">
-      <img
-        className="galeria__principal"
-        src={imagenes[actual]}
-        alt={nombre}
-      />
-      {imagenes.length > 1 && (
-        <div className="galeria__miniaturas">
-          {imagenes.map((src, i) => (
-            <img
-              key={src}
-              src={src}
-              alt={`${nombre} ${i + 1}`}
-              className={i === actual ? "activa" : ""}
-              onClick={() => setActual(i)}
-            />
-          ))}
-        </div>
-      )}
+    <div className="detail-gallery">
+      <img className="gallery-main" src={fotoDe(salon, 0)} alt={salon.nombre ?? "Salón"} />
+      <img src={fotoDe(salon, 1)} alt="" />
+      <div className="gallery-last">
+        <img src={fotoDe(salon, 2)} alt="" />
+        {extra > 0 && <span>+{extra} fotos</span>}
+      </div>
     </div>
   );
 }
