@@ -42,3 +42,44 @@ def crear_salon_endpoint(salon: SalonCreate, db: Session = Depends(get_db)):
 @tipos_router.get("", response_model=list[str])
 def listar_tipos(db: Session = Depends(get_db)):
     return [t.nombre for t in db.query(TipoEvento).order_by(TipoEvento.nombre)]
+@router.get("/{salon_id}/disponibilidad")
+def disponibilidad(
+    salon_id: int,
+    mes: str = Query(..., pattern=r"^\d{4}-\d{2}$"),
+    db: Session = Depends(get_db),
+):
+    if not repo.obtener_salon(db, salon_id):
+        raise HTTPException(status_code=404, detail="Salón no encontrado")
+
+    anio, nro_mes = int(mes[:4]), int(mes[5:])
+    if not 1 <= nro_mes <= 12:
+        raise HTTPException(status_code=400, detail="Mes inválido")
+
+    desde = datetime(anio, nro_mes, 1)
+    ultimo_dia = calendar.monthrange(anio, nro_mes)[1]
+    hasta = datetime(anio, nro_mes, ultimo_dia) + timedelta(days=1)
+
+    turnos = (
+        db.query(TurnoModel)
+        .filter(
+            TurnoModel.salon_id == salon_id,
+            TurnoModel.estado != "cancelado",
+            TurnoModel.fecha_inicio >= desde,
+            TurnoModel.fecha_inicio < hasta,
+        )
+        .order_by(TurnoModel.fecha_inicio)
+        .all()
+    )
+
+    return {
+        "salon_id": salon_id,
+        "mes": mes,
+        "ocupados": [
+            {
+                "fecha": t.fecha_inicio.date().isoformat(),
+                "hora_inicio": t.fecha_inicio.strftime("%H:%M"),
+                "hora_fin": t.fecha_fin.strftime("%H:%M"),
+            }
+            for t in turnos
+        ],
+    }
