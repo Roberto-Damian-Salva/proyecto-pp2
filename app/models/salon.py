@@ -24,10 +24,12 @@ class SalonModel(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String, nullable=False)
-    descripcion = Column(String)
-    direccion = Column(String)
+    direccion = Column(String, nullable=False)
     capacidad = Column(Integer, nullable=False)
-    precio_por_hora = Column(Float, default=0)
+    precio_por_hora = Column(Float, nullable=False)
+
+    # Campos nuevos
+    descripcion = Column(String, nullable=True)
     servicios = Column(JSON, default=list)   # ["catering", "sonido"]
     imagenes = Column(JSON, default=list)    # ["https://..."]
     tipos = relationship("TipoEvento", secondary=salon_tipo)

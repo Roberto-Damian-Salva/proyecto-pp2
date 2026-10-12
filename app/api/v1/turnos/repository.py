@@ -1,28 +1,74 @@
+from datetime import datetime, time, timedelta
+
 from sqlalchemy.orm import Session
+
 from app.models.turno import TurnoModel
 from app.api.v1.turnos.schemas import TurnoCreate
 
-# Regla de negocio BE-05: previene reservas solapadas
-def obtener_turno_solapado(db: Session, salon_id: int, fecha_inicio, fecha_fin):
-    return db.query(TurnoModel).filter(
-        TurnoModel.salon_id == salon_id,
-        TurnoModel.estado != "cancelado",
-        TurnoModel.fecha_inicio < fecha_fin,
-        TurnoModel.fecha_fin > fecha_inicio
-    ).first()
 
-def crear_turno(db: Session, turno_in: TurnoCreate, cliente_id: int):
-    nuevo_turno = TurnoModel(
-        cliente_id=cliente_id,
-        salon_id=turno_in.salon_id,
-        fecha_inicio=turno_in.fecha_inicio,
-        fecha_fin=turno_in.fecha_fin,
-        estado="confirmado"
+def a_respuesta(t: TurnoModel) -> dict:
+    """Convierte un TurnoModel al formato que usa el frontend."""
+    return {
+        "id": t.id,
+        "salon_id": t.salon_id,
+        "salon_nombre": t.salon.nombre if t.salon else None,
+        "usuario_email": t.cliente.email if t.cliente else None,
+        "fecha": t.fecha_inicio.date(),
+        "hora_inicio": t.fecha_inicio.time(),
+        "hora_fin": t.fecha_fin.time(),
+        "tipo_evento": t.tipo_evento,
+        "estado": t.estado,
+    }
+
+
+def hay_superposicion(db: Session, salon_id: int, inicio: datetime, fin: datetime) -> bool:
+    return (
+        db.query(TurnoModel)
+        .filter(
+            TurnoModel.salon_id == salon_id,
+            TurnoModel.estado != "cancelado",
+            TurnoModel.fecha_inicio < fin,
+            TurnoModel.fecha_fin > inicio,
+        )
+        .first()
+        is not None
     )
-    db.add(nuevo_turno)
-    db.commit()
-    db.refresh(nuevo_turno)
-    return nuevo_turno
 
-def obtener_turnos(db: Session):
-    return db.query(TurnoModel).all()
+
+def crear_turno(db: Session, data: TurnoCreate, cliente_id: int) -> TurnoModel:
+    turno = TurnoModel(
+        cliente_id=cliente_id,
+        salon_id=data.salon_id,
+        fecha_inicio=datetime.combine(data.fecha, data.hora_inicio),
+        fecha_fin=datetime.combine(data.fecha, data.hora_fin),
+        tipo_evento=data.tipo_evento,
+        estado="pendiente",
+    )
+    db.add(turno)
+    db.commit()
+    db.refresh(turno)
+    return turno
+
+
+def turnos_de_cliente(db: Session, cliente_id: int):
+    return (
+        db.query(TurnoModel)
+        .filter(TurnoModel.cliente_id == cliente_id)
+        .order_by(TurnoModel.fecha_inicio.desc())
+        .all()
+    )
+
+
+def listar_todos(db: Session, salon_id=None, fecha=None, estado=None):
+    q = db.query(TurnoModel)
+    if salon_id:
+        q = q.filter(TurnoModel.salon_id == salon_id)
+    if fecha:
+        desde = datetime.combine(fecha, time.min)
+        q = q.filter(
+            TurnoModel.fecha_inicio >= desde,
+            TurnoModel.fecha_inicio < desde + timedelta(days=1),
+        )
+    if estado:
+        q = q.filter(TurnoModel.estado == estado)
+    return q.order_by(TurnoModel.fecha_inicio.desc()).all()

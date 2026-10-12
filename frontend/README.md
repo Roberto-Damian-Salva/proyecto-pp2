@@ -1,16 +1,41 @@
-# React + Vite
+# Sistema de Turnos — PP2 Grupo 8
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Reserva de salones de eventos: búsqueda por tipo de evento, detalle, calendario por salón, reservas y panel de administración.
 
-Currently, two official plugins are available:
+## Tecnologías
+- Backend: FastAPI, SQLAlchemy, SQLite (PostgreSQL en producción), JWT
+- Frontend: React + Vite, react-router-dom, react-datepicker
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Backend
 
-## React Compiler
+```bash
+python -m venv .venv
+.venv\Scripts\activate            # Windows
+pip install -r requirements.txt
+python -m scripts.seed            # carga datos de prueba
+python -m scripts.crear_admin     # crea admin@turnos.com
+python -m uvicorn app.main:app --reload
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Documentación interactiva: http://localhost:8000/docs
 
-## Expanding the ESLint configuration
+## Frontend
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+cd frontend
+npm install
+cp .env.example .env              # en Windows: copy .env.example .env
+npm run dev
+```
+
+App: http://localhost:5173
+
+## Flujo de trabajo (Git)
+1. `git checkout develop && git pull`
+2. `git checkout -b feature/nombre-tarea`
+3. Commits chicos y `git push -u origin feature/nombre-tarea`
+4. Pull Request a `develop`, revisión de otro integrante
+5. Merge y borrar la rama
+
+## Definición de Hecho
+Funciona en local, lo revisó otro integrante, no rompe lo existente y está en `develop`.
