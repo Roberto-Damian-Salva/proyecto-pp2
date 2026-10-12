@@ -2,6 +2,12 @@ import calendar
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from datetime import date, datetime, timedelta
+
+from fastapi import Query
+
+from app.models.turno import TurnoModel
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
