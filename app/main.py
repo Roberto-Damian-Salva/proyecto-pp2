@@ -1,27 +1,36 @@
-import os
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.core.db import Base, engine
+from app.api.v1.salones.router import router as salones_router
+from app.api.v1.turnos.router import router as turnos_router
+from app.api.v1.auth.router import router as auth_router
+from app.models.turno import TurnoModel
+from app.models.salon import SalonModel
 
-from app.database import Base, engine
-from app import models  # noqa: F401  (registra todos los modelos antes de crear tablas)
-from app.api.v1.router import api_router
 
+# Crear automáticamente las tablas en la BD si no existen
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Sistema de Turnos")
+app = FastAPI(
+    title="Sistema de Reserva de Salones",
+    description="API REST modularizada para la gestión de salones y turnos.",
+    version="1.0.0"
+)
 
-# Orígenes permitidos: Vite en local y la URL de Vercel en producción
-origenes = ["http://localhost:5173"]
-if os.getenv("FRONTEND_URL"):
-    origenes.append(os.getenv("FRONTEND_URL"))
-
+# Configurar CORS para permitir peticiones desde el frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origenes,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=True, 
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(api_router, prefix="/api/v1")
+# Incluir las rutas
+app.include_router(salones_router, prefix="/api/v1/salones", tags=["Salones"])
+app.include_router(turnos_router, prefix="/api/v1/turnos", tags=["Turnos"])
+app.include_router(auth_router, prefix="/api/v1")
+
+@app.get("/")
+def inicio():
+    return {"mensaje": "Bienvenido al sistema de reservas de salones"}
