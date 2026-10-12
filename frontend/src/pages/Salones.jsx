@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import BuscadorSalones from "../components/BuscadorSalones";
 import SalonCard from "../components/SalonCard";
+import SalonModal from "../components/SalonModal";
 import Contacto from "../components/Contacto";
 import Icono from "../components/Icono";
 import { useSalones } from "../hooks/useSalones";
@@ -10,6 +11,8 @@ import { HERO } from "../utils/imagenes";
 export default function Salones() {
   const [params] = useSearchParams();
   const { hash } = useLocation();
+  const [seleccionado, setSeleccionado] = useState(null); // salón abierto en la tarjeta grande
+  const cerrar = useCallback(() => setSeleccionado(null), []);
 
   const filtros = {
     tipo_evento: params.get("tipo_evento") ?? "",
@@ -55,11 +58,15 @@ export default function Salones() {
           {!cargando && !error && salones.length === 0 && (
             <p className="empty-state">No hay salones para ese evento.</p>
           )}
-          {salones.map((s) => <SalonCard key={s.id} salon={s} />)}
+          {salones.map((s) => (
+            <SalonCard key={s.id} salon={s} onAbrir={setSeleccionado} />
+          ))}
         </div>
       </section>
 
       <Contacto />
+
+      {seleccionado && <SalonModal salon={seleccionado} onCerrar={cerrar} />}
     </>
   );
 }

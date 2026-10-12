@@ -319,3 +319,33 @@ button.nav-cta { cursor: pointer; background: none; font: inherit; }
 .auth-card select { width: 100%; margin-top: 6px; padding: 12px 0; background: transparent; color: var(--ink); border: 0; border-bottom: 1px solid var(--line); color-scheme: dark; }
 .auth-card option { background: var(--surface-raised); }
 .auth-card input[type="date"] { color-scheme: dark; }
+
+/* ===== Tarjeta que se abre en grande (modal del salon) ===== */
+.venue-card { position: relative; cursor: pointer; }
+.card-abrir { background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.card-abrir::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.card-abrir:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.venue-card .heart-button { z-index: 2; }
+.venue-card .text-button { position: relative; z-index: 2; }
+
+.modal-content.modal-salon { max-width: 860px; padding: 0; max-height: 92vh; overflow-y: auto; }
+.modal-salon .btn-cerrar { top: 14px; right: 14px; z-index: 2; width: 40px; height: 40px; display: grid; place-items: center; border: 0; background: rgba(6,31,26,.85); color: #fff; line-height: 1; cursor: pointer; }
+.modal-salon__foto { width: 100%; height: 380px; object-fit: cover; }
+.modal-salon__miniaturas { display: flex; gap: 8px; padding: 10px 36px 0; }
+.modal-salon__miniaturas button { width: 84px; height: 58px; padding: 0; border: 1px solid var(--line); background: none; cursor: pointer; opacity: .6; }
+.modal-salon__miniaturas button.activa { opacity: 1; border-color: var(--gold); }
+.modal-salon__miniaturas img { width: 100%; height: 100%; object-fit: cover; }
+.modal-salon__cuerpo { padding: 26px 36px 32px; }
+.modal-salon__desc { color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
+.modal-salon__pie { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line); }
+.modal-salon__precio span { display: block; color: var(--muted); font-size: 11px; }
+.modal-salon__precio strong { font-family: "Cormorant Garamond", serif; font-size: 32px; font-weight: 500; }
+.modal-salon__precio small { color: var(--muted); margin-left: 6px; }
+.modal-salon__acciones { display: flex; gap: 12px; flex-wrap: wrap; }
+.modal-salon__acciones .btn-outline, .modal-salon__acciones .primary-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+@media (max-width: 760px) {
+  .modal-salon__foto { height: 230px; }
+  .modal-salon__cuerpo, .modal-salon__miniaturas { padding-left: 20px; padding-right: 20px; }
+  .modal-salon__acciones { width: 100%; }
+  .modal-salon__acciones > * { flex: 1; }
+}
