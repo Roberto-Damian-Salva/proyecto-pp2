@@ -11,3 +11,4 @@ frontend/.env
 frontend/dist
 frontend/.git-backup
 .env 
+*.db
