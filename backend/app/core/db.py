@@ -19,13 +19,19 @@ elif SQLALCHEMY_DATABASE_URL.startswith("postgresql://"):
 
 es_sqlite = SQLALCHEMY_DATABASE_URL.startswith("sqlite")
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    # check_same_thread solo hace falta (y solo existe) en SQLite
-    connect_args={"check_same_thread": False} if es_sqlite else {},
-    # En PostgreSQL revisa que la conexión siga viva antes de usarla
-    pool_pre_ping=not es_sqlite,
-)
+from sqlalchemy.pool import NullPool
+
+if es_sqlite:
+    engine = create_engine(
+        SQLALCHEMY_DATABASE_URL,
+        connect_args={"check_same_thread": False},
+    )
+else:
+    engine = create_engine(
+        SQLALCHEMY_DATABASE_URL,
+        connect_args={"prepare_threshold": None},
+        poolclass=NullPool,
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
