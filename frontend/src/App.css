@@ -349,3 +349,15 @@ button.nav-cta { cursor: pointer; background: none; font: inherit; }
   .modal-salon__acciones { width: 100%; }
   .modal-salon__acciones > * { flex: 1; }
 }
+
+/* ===== Panel de administracion (formulario de salones) ===== */
+.auth-card.auth-card--ancha { max-width: 640px; width: 100%; }
+.auth-card textarea { width: 100%; margin-top: 6px; padding: 10px 0; background: transparent; color: var(--ink); border: 0; border-bottom: 1px solid var(--line); font: inherit; resize: vertical; outline: none; }
+.auth-card fieldset { border: 1px solid var(--line); padding: 14px 16px; margin: 0 0 18px; }
+.auth-card legend { color: var(--gold-light); font-size: 10px; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; padding: 0 6px; }
+.auth-card .chk { display: inline-flex; flex-direction: row; align-items: center; gap: 8px; margin: 0 18px 8px 0; text-transform: none; letter-spacing: 0; font-size: 13px; color: var(--ink); }
+.auth-card .chk input { width: auto; margin: 0; }
+.auth-card .nuevo-tipo { display: flex; gap: 10px; align-items: flex-end; margin-top: 8px; }
+.ayuda { color: var(--muted); font-size: 12px; margin: 4px 0 0; text-transform: none; letter-spacing: 0; font-weight: 500; }
+.admin-barra { max-width: 900px; margin: 0 auto 20px; padding: 0 24px; }
+.admin-barra .primary-button { display: inline-flex; align-items: center; gap: 8px; }
