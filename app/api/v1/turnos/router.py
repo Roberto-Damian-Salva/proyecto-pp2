@@ -19,14 +19,19 @@ def reservar(
 ):
     if not db.get(SalonModel, data.salon_id):
         raise HTTPException(status_code=404, detail="Salón no encontrado")
+
     if data.fecha < date.today():
         raise HTTPException(status_code=400, detail="No se puede reservar en el pasado")
+
     inicio = datetime.combine(data.fecha, data.hora_inicio)
     fin = datetime.combine(data.fecha, data.hora_fin)
+
     if fin <= inicio:
         raise HTTPException(status_code=400, detail="hora_fin debe ser mayor que hora_inicio")
+
     if repo.hay_superposicion(db, data.salon_id, inicio, fin):
         raise HTTPException(status_code=409, detail="Ese horario ya está ocupado")
+
     return repo.a_respuesta(repo.crear_turno(db, data, user.id))
 
 @router.get("/", response_model=list[TurnoResponse])
@@ -52,8 +57,11 @@ def cancelar(
     turno = db.get(TurnoModel, turno_id)
     if not turno:
         raise HTTPException(status_code=404, detail="Turno no encontrado")
+
     if turno.cliente_id!= user.id and getattr(user, "rol", None)!= "admin":
         raise HTTPException(status_code=403, detail="No podés cancelar este turno")
+
+    # Cancelación lógica: libera el horario y deja historial
     turno.estado = "cancelado"
     db.commit()
     return None
