@@ -10,3 +10,4 @@ node_modules/
 frontend/.env
 frontend/dist
 frontend/.git-backup
+.env 
