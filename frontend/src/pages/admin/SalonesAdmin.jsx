@@ -1,24 +1,74 @@
 import { useEffect, useState } from "react";
-import { salonesApi } from "../../services/salonesApi";
 import { Link } from "react-router-dom";
+import Icono from "../../components/Icono";
+import { salonesApi } from "../../services/salonesApi";
 
 export default function SalonesAdmin() {
   const [salones, setSalones] = useState([]);
-  useEffect(() => { salonesApi.listar().then(setSalones).catch(console.error); }, []);
-  const handleDelete = async (id) => {
-    if(!confirm("Borrar?")) return;
-    await salonesApi.eliminar(id);
-    setSalones(p=>p.filter(s=>s.id!==id));
-  };
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+
+  function cargar() {
+    setCargando(true);
+    salonesApi
+      .listar()
+      .then(setSalones)
+      .catch((e) => setError(e.message))
+      .finally(() => setCargando(false));
+  }
+
+  useEffect(() => {
+    cargar();
+  }, []);
+
+  async function borrar(s) {
+    if (!window.confirm(`¿Eliminar "${s.nombre}"? También se borran sus turnos.`)) return;
+    setError(null);
+    try {
+      await salonesApi.eliminar(s.id);
+      cargar();
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+
   return (
-    <div style={{padding:20}}>
-      <h2>Salones</h2>
-      <Link to="/admin/salones/nuevo">Nuevo Salón</Link>
-      {salones.map(s=>(
-        <div key={s.id} style={{border:"1px solid #ccc", margin:10, padding:10}}>
-          {s.nombre} - ${s.precio} <button onClick={()=>handleDelete(s.id)}>Borrar</button>
-        </div>
-      ))}
-    </div>
+    <>
+      <header className="page-head">
+        <span className="eyebrow"><span></span> Administración</span>
+        <h2>Gestionar <em>salones</em></h2>
+      </header>
+
+      <div className="admin-barra">
+        <Link className="primary-button" to="/admin/salones/nuevo">
+          Agregar salón <Icono nombre="arrow" size={16} />
+        </Link>
+      </div>
+
+      {error && <p className="form-msg turnos-msg" role="alert">{error}</p>}
+
+      <section className="turnos-list" aria-live="polite">
+        {cargando && <div className="state-box"><p>Cargando salones...</p></div>}
+        {!cargando && salones.length === 0 && (
+          <div className="state-box"><p>Todavía no hay salones. Agregá el primero.</p></div>
+        )}
+
+        {salones.map((s) => (
+          <article key={s.id} className="turno-card">
+            <div>
+              <h3>{s.nombre}</h3>
+              <p className="turno-meta">
+                {s.direccion} · Hasta {s.capacidad} · ${s.precio_por_hora?.toLocaleString("es-AR")} por hora
+              </p>
+            </div>
+            <span></span>
+            <div className="turno-acciones">
+              <Link className="btn-outline" to={`/admin/salones/${s.id}`}>Editar</Link>
+              <button className="btn-danger" type="button" onClick={() => borrar(s)}>Eliminar</button>
+            </div>
+          </article>
+        ))}
+      </section>
+    </>
   );
 }
